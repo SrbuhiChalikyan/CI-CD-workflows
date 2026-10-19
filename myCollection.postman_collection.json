@@ -1,0 +1,665 @@
+{
+  "info": {
+    "_postman_id": "9d8f6b43-e2a5-4ad7-b447-8fbf8be27f11",
+    "name": "Lesson_3_API Homework",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "30836758"
+  },
+  "item": [
+    {
+      "name": "Register",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const timestamp = Date.now();\r",
+              "\r",
+              "pm.environment.set(\"firstName\", `User${timestamp}`);\r",
+              "pm.environment.set(\"email\", `user${timestamp}@gmail.com`);\r",
+              "pm.environment.set(\"username\", `user${timestamp}`);\r",
+              "pm.environment.set(\"password\", `Password${timestamp}!`);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"first_name\": \"{{firstName}}\",\r\n  \"email\": \"{{email}}\",\r\n  \"username\": \"{{username}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"role_id\": 2,\r\n  \"account\": 100\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/register/api",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "register",
+            "api"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Response contains token\", function () {\r",
+              "    const response = pm.response.json();\r",
+              "    pm.expect(response).to.have.property(\"token\");\r",
+              "    pm.environment.set(\"token\", response.token);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "{{password}}",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "{{username}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/login/api",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "login",
+            "api"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login as an admin user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Response contains token\", function () {\r",
+              "    const response = pm.response.json();\r",
+              "    pm.expect(response).to.have.property(\"token\");\r",
+              "    pm.environment.set(\"adminToken\", response.token);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "11111111",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "admin_user",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/login/api",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "login",
+            "api"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create a new course with invalid course type",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const timestamp = Date.now();\r",
+              "\r",
+              "pm.environment.set(\"courseTitle\", `Test Course ${timestamp}`);\r",
+              "pm.environment.set(\"courseBody\", `Test Course Body ${timestamp}`);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.eql(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Invalid course type returns correct error message\", function () {\r",
+              "    const response = pm.response.text();\r",
+              "\r",
+              "    pm.expect(response).to.eql(\"Course type should be 1 or 2\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "11111111",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "admin_user",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"{{courseTitle}}\",\r\n  \"body\": \"{{courseBody}}\",\r\n  \"coursetype\": \"3\",\r\n  \"author\": \"nnn\",\r\n  \"price\": 100\r\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/add_course/api",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "add_course",
+            "api"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create a new fundamental course",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const timestamp = Date.now();\r",
+              "\r",
+              "pm.environment.set(\"courseTitle\", `Test Course ${timestamp}`);\r",
+              "pm.environment.set(\"courseBody\", `Test Course Body ${timestamp}`);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "11111111",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "admin_user",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"{{courseTitle}}\",\r\n  \"body\": \"{{courseBody}}\",\r\n  \"coursetype\": \"1\",\r\n  \"author\": \"{{username}}\",\r\n  \"price\": 0\r\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/add_course/api",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "add_course",
+            "api"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create a new advanced course",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const timestamp = Date.now();\r",
+              "\r",
+              "pm.environment.set(\"courseTitle\", `Test Course ${timestamp}`);\r",
+              "pm.environment.set(\"courseBody\", `Test Course Body ${timestamp}`);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.json();\r",
+              "\r",
+              "pm.environment.set(\"courseId\", response.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "11111111",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "admin_user",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"{{courseTitle}}\",\r\n  \"body\": \"{{courseBody}}\",\r\n  \"coursetype\": \"2\",\r\n  \"author\": \"{{username}}\",\r\n  \"price\": 0\r\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/add_course/api",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "add_course",
+            "api"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get newly added advanced course",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.json();\r",
+              "const courses = response.result;\r",
+              "\r",
+              "const courseId = Number(pm.environment.get(\"courseId\"));\r",
+              "\r",
+              "pm.test(\"Created course exists\", function () {\r",
+              "    const courseExists = courses.some(course => course.id === courseId);\r",
+              "    pm.expect(courseExists).to.be.true;\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{baseUrl}}/courses/advanced/api",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "courses",
+            "advanced",
+            "api"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete newly added advanced course",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.text();\r",
+              "const courseId = pm.environment.get(\"courseId\");\r",
+              "\r",
+              "pm.test(\"Course is deleted successfully\", function () {\r",
+              "    pm.expect(response).to.eql(`The course with id ${courseId} is deleted`);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{baseUrl}}/courses/course/{{courseId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "courses",
+            "course",
+            "{{courseId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get advanced courses after deleting",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.json();\r",
+              "const courses = response.result;\r",
+              "const courseId = Number(pm.environment.get(\"courseId\"));\r",
+              "\r",
+              "pm.test(\"Deleted course does not exist\", function () {\r",
+              "    const courseExists = courses.some(course => course.id === courseId);\r",
+              "    pm.expect(courseExists).to.be.false;\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{baseUrl}}/courses/advanced/api",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "courses",
+            "advanced",
+            "api"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get several advanced courses",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.json();\r",
+              "const courses = response.result;\r",
+              "\r",
+              "const count = response.count\r",
+              "console.log(count)\r",
+              "\r",
+              "courseIds.forEach(courseId => {\r",
+              "    pm.test(`Course ${courseId} exists`, function () {\r",
+              "        const exists = courses.some(course => course.id === courseId);\r",
+              "        pm.expect(exists).to.be.true;\r",
+              "    });\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{baseUrl}}/courses/advanced/api",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "courses",
+            "advanced",
+            "api"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get several fundamental courses",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.json();\r",
+              "const courses = response.result;\r",
+              "\r",
+              "const courseIds = [\r",
+              "    2147483652,\r",
+              "    2147483654,\r",
+              "    2147483655,\r",
+              "    2147483659,\r",
+              "    2147483660,\r",
+              "    2147483664,\r",
+              "    2147483679,\r",
+              "    2147483682,\r",
+              "    2147483686,\r",
+              "    2147483695,\r",
+              "    2147483727,\r",
+              "    2147483738,\r",
+              "\r",
+              "];\r",
+              "\r",
+              "courseIds.forEach(courseId => {\r",
+              "    pm.test(`Course ${courseId} exists`, function () {\r",
+              "        const exists = courses.some(course => course.id === courseId);\r",
+              "        pm.expect(exists).to.be.true;\r",
+              "    });\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{baseUrl}}/courses/advanced/api",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "courses",
+            "advanced",
+            "api"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{baseUrl}}"
+    },
+    {
+      "key": "token",
+      "value": "{{token}}"
+    }
+  ]
+}
