@@ -23,16 +23,16 @@ jobs:
         run: |
           npm install -g newman newman-reporter-htmlextra
 
-      - name: Run Newman tests
+     - name: Run Newman tests
         run: |
-            newman run  myCollection.postman_collection.json \
+          newman run myCollection.postman_collection.json \
             --environment myEnvironment.postman_environment.json \
-              -r cli,htmlextra \
-              --reporter-htmlextra-export newman-report.html
+            -r cli,htmlextra \
+            --reporter-htmlextra-export newman-report.html
 
       - name: Upload HTML report
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: postman-html-report
           path: newman-report.html
