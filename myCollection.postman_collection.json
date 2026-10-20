@@ -226,7 +226,12 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"title\": \"{{courseTitle}}\",\r\n  \"body\": \"{{courseBody}}\",\r\n  \"coursetype\": \"3\",\r\n  \"author\": \"nnn\",\r\n  \"price\": 100\r\n}"
+          "raw": "{\r\n  \"title\": \"{{courseTitle}}\",\r\n  \"body\": \"{{courseBody}}\",\r\n  \"coursetype\": \"3\",\r\n  \"author\": \"nnn\",\r\n  \"price\": 100\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
         },
         "url": {
           "raw": "{{baseUrl}}/add_course/api",
@@ -514,8 +519,10 @@
               "const response = pm.response.json();\r",
               "const courses = response.result;\r",
               "\r",
-              "const count = response.count\r",
-              "console.log(count)\r",
+              "const courseIds = [\r",
+              "    2147484610\r",
+              "\r",
+              "];\r",
               "\r",
               "courseIds.forEach(courseId => {\r",
               "    pm.test(`Course ${courseId} exists`, function () {\r",
@@ -527,6 +534,13 @@
             "type": "text/javascript",
             "packages": {},
             "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "packages": {},
+            "type": "text/javascript"
           }
         }
       ],
@@ -604,13 +618,13 @@
           "raw": ""
         },
         "url": {
-          "raw": "{{baseUrl}}/courses/advanced/api",
+          "raw": "{{baseUrl}}/courses/fundamental/api",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
             "courses",
-            "advanced",
+            "fundamental",
             "api"
           ]
         }
